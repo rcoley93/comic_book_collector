@@ -25,6 +25,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().setTitle("Home");
+
         tvComics = (TextView) findViewById(R.id.totalComics);
         tvSeries = (TextView) findViewById(R.id.totalSeries);
         tvPublishers = (TextView) findViewById(R.id.totalPublishers);
