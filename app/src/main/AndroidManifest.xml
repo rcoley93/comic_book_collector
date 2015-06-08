@@ -11,7 +11,7 @@
         android:versionName="1.3">
         <activity
             android:name=".MainActivity"
-            android:label="Home" >
+            android:label="@string/main_activity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

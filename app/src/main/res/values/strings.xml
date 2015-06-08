@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">CBC</string>
+    <string name="app_name">Comic Book Collector</string>
     <string name="title_activity_add_comic">Add Comic</string>
     <string name="title_activity_import_comics">Import Comics</string>
     <string name="title_activity_search">Search</string>
     <string name="title_activity_view_comic">View Comic</string>
     <string name="title_activity_view_comics">View Series</string>
     <string name="title_activity_view_issues">View Issues</string>
+    <string name="main_activity">CBC</string>
 
     <string-array name="comic_read">
         <item>Read</item>
