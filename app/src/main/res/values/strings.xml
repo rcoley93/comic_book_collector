@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CBC</string>
+    <string name="title_activity_add_comic">Add Comic</string>
+    <string name="title_activity_import_comics">Import Comics</string>
+    <string name="title_activity_search">Search</string>
+    <string name="title_activity_view_comic">View Comic</string>
+    <string name="title_activity_view_comics">View Series</string>
+    <string name="title_activity_view_issues">View Issues</string>
+
+    <string-array name="comic_read">
+        <item>Read</item>
+        <item>Unread</item>
+    </string-array>
+
+    <string-array name="comic_storage">
+        <item>None</item>
+        <item>Bagged</item>
+        <item>Bagged/Boarded</item>
+    </string-array>
+
+    <string-array name="comic_grades">
+        <item>NM Near Mint</item>
+        <item>VF Very Fine</item>
+        <item>FN Fine</item>
+        <item>VG Very Good</item>
+        <item>GD Good</item>
+        <item>FR Fair</item>
+        <item>PR Poor</item>
+    </string-array>
+
+    <string-array name="categories">
+        <item>Title</item>
+        <item>Issue Number</item>
+    </string-array>
+
+
+</resources>

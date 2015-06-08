@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:gravity="left|center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" >
+        <EditText android:textSize="18.0sp" android:id="@+id/series" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Series" />
+        <EditText android:textSize="18.0sp" android:id="@+id/issueNumber" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Issue Number" />
+        <EditText android:textSize="18.0sp" android:id="@+id/issueTitle" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Issue Title" />
+        <EditText android:textSize="18.0sp" android:id="@+id/publisher" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Publisher" />
+        <TextView android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Cover Date"  />
+        <DatePicker android:layout_gravity="center_horizontal" android:id="@+id/coverDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:calendarViewShown="false" />
+        <EditText android:textSize="18.0sp" android:id="@+id/coverPrice" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Cover Price" android:inputType="numberDecimal" />
+        <TextView android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Comic Grade"  />
+        <Spinner android:entries="@array/comic_grades" android:id="@+id/condition" android:focusable="false" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+        <TextView android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Storage Method"  />
+        <Spinner android:entries="@array/comic_storage" android:id="@+id/storageMethod" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+        <EditText android:textSize="18.0sp" android:id="@+id/comicLocation" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Comic Location" />
+        <TextView android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Read/Unread"  />
+        <Spinner android:entries="@array/comic_read" android:id="@+id/readUnread" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+        <TextView android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Acquired Date"  />
+        <EditText android:textSize="18.0sp" android:id="@+id/pricePaid" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Price Paid" android:inputType="numberDecimal" />
+        <DatePicker android:layout_gravity="center_horizontal" android:id="@+id/acquiredDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:calendarViewShown="false" />
+        <EditText android:textSize="18.0sp" android:id="@+id/locationAcquired" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Location Acquired" />
+        <EditText android:textSize="18.0sp" android:id="@+id/writer" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Writer" />
+        <EditText android:textSize="18.0sp" android:id="@+id/penciller" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Penciller" />
+        <EditText android:textSize="18.0sp" android:id="@+id/inker" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Inker" />
+        <EditText android:textSize="18.0sp" android:id="@+id/colorist" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Colorist" />
+        <EditText android:textSize="18.0sp" android:id="@+id/letterer" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Letterer" />
+        <EditText android:textSize="18.0sp" android:id="@+id/editor" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Editor" />
+        <EditText android:textSize="18.0sp" android:id="@+id/coverArtist" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Cover Artist" />
+        <Button android:textSize="30.0dp" android:textColor="#ffffffff" android:id="@+id/btnAddComic" android:background="@drawable/button" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Add Comic" android:onClick="addComic" />
+    </LinearLayout>
+</ScrollView>

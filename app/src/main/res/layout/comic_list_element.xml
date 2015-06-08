@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textAppearance="?android:textAppearanceMedium" android:gravity="left" android:layout_gravity="left" android:id="@+id/itemComicTitle" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Comic Title" />
+    <TextView android:textAppearance="?android:textAppearanceMedium" android:gravity="left" android:layout_gravity="left" android:id="@+id/itemIssueNumber" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="\# of Issues" />
+</LinearLayout>
