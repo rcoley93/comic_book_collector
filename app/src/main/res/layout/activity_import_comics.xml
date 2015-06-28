@@ -14,7 +14,7 @@
         <ImageView android:layout_gravity="center_horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/export" />
         <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_gravity="center_horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Save the file." />
         <TextView android:textAppearance="?android:textAppearanceLarge" android:layout_gravity="center_horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Step 5:" />
-        <Button android:textAppearance="?android:textAppearanceMedium" android:layout_gravity="center_horizontal" android:background="@drawable/button" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Import" android:textSize="30.0dp" android:textColor="#ffffffff" android:onClick="importComics"
+        <Button android:textAppearance="?android:textAppearanceMedium" android:layout_gravity="center_horizontal" android:background="@drawable/button" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Import" android:textSize="30.0dp" android:textColor="#ffffffff" android:onClick="importComic"
             android:padding="5dp" />
     </LinearLayout>
 </ScrollView>

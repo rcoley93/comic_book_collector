@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -52,10 +53,17 @@ public class importComics extends ActionBarActivity {
         }
     }
 
-    public void importComics(View v) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("file/*");
-        startActivityForResult(intent, FILE_CHOOSER);
+    public void importComic(View v) {
+        String phone = Build.MANUFACTURER;
+        Intent i;
+        if(phone.equalsIgnoreCase("Samsung")){
+            i = new Intent();
+            i.setAction("com.sec.android.app.myfiles.PICK_DATA");
+        }else {
+            i = new Intent(Intent.ACTION_GET_CONTENT);
+            i.setType("file/*");
+        }
+        startActivityForResult(i, FILE_CHOOSER);
     }
 
     public void createImportDialog(){
@@ -86,7 +94,7 @@ public class importComics extends ActionBarActivity {
         }
 
         private String resp, fileName;
-        List<String[]> list = new ArrayList<String[]>();
+        List<String[]> list = new ArrayList<>();
         Context c;
         ComicBookDatabaseHelper cbdbHelper;
 
