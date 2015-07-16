@@ -7,6 +7,7 @@
     <string name="title_activity_view_comic">View Comic</string>
     <string name="title_activity_view_comics">View Series</string>
     <string name="title_activity_view_issues">View Issues</string>
+    <string name="title_activity_file_chooser">File Chooser</string>
     <string name="main_activity">CBC</string>
 
     <string-array name="comic_read">

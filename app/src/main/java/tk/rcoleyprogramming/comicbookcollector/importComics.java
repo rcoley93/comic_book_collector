@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -44,7 +43,7 @@ public class importComics extends ActionBarActivity {
             case FILE_CHOOSER:
                 if (resultCode == RESULT_OK) {
                     ComicBookDatabaseHelper cbdbHelper = new ComicBookDatabaseHelper(this);
-                    String FilePath = data.getData().getPath();
+                    String FilePath = data.getStringExtra("fileSelected");
                     importComicbooks ic = new importComicbooks(FilePath, cbdbHelper,importComics.this);
                     ic.execute();
                 }
@@ -54,15 +53,10 @@ public class importComics extends ActionBarActivity {
     }
 
     public void importComic(View v) {
-        String phone = Build.MANUFACTURER;
-        Intent i;
-        if(phone.equalsIgnoreCase("Samsung")){
-            i = new Intent();
-            i.setAction("com.sec.android.app.myfiles.PICK_DATA");
-        }else {
-            i = new Intent(Intent.ACTION_GET_CONTENT);
-            i.setType("file/*");
-        }
+        Intent i = new Intent(this, FileChooser.class);
+        ArrayList<String> extensions = new ArrayList<String>();
+        extensions.add(".csv");
+        i.putExtra("filterFileExtension",extensions);
         startActivityForResult(i, FILE_CHOOSER);
     }
 
