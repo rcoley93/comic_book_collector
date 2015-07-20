@@ -19,6 +19,11 @@ public class AddComic extends ActionBarActivity {
 
     String strPublisher, strSeries;
     int intID = -1;
+    //all of the views on the page
+    EditText etSeries, etPublisher, etIssueNumber, etIssueTitle, etPricePaid,
+            etWriter, etPenciller, etInker, etColorist, etLetterer, etEditor,
+            etCoverArtist, etLocationAcquired, etCoverPrice, etComicLocation, etDateAquiredYear, etCoverDateYear;
+    Spinner spGrade, spStorageMethod, spReadUnread, spCoverDateMonth;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -40,13 +45,13 @@ public class AddComic extends ActionBarActivity {
         etLocationAcquired = (EditText) findViewById(R.id.locationAcquired);
         etEditor = (EditText) findViewById(R.id.editor);
         etWriter = (EditText) findViewById(R.id.writer);
-
-        dpCoverDate = (DatePicker) findViewById(R.id.coverDate);
-        dpDateAcquired = (DatePicker) findViewById(R.id.acquiredDate);
+        etDateAquiredYear = (EditText) findViewById(R.id.etDateAquiredYear);
+        etCoverDateYear = (EditText) findViewById(R.id.etCoverDateYear);
 
         spGrade = (Spinner) findViewById(R.id.condition);
         spStorageMethod = (Spinner) findViewById(R.id.storageMethod);
         spReadUnread = (Spinner) findViewById(R.id.readUnread);
+        spCoverDateMonth = (Spinner) findViewById(R.id.spnCoverDateMonth);
 
         getInfo();
 
@@ -77,7 +82,12 @@ public class AddComic extends ActionBarActivity {
                 etPublisher.setText(cursor.getString(cursor.getColumnIndexOrThrow("publisher")));
                 etIssueNumber.setText(String.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("issue_number"))));
                 etIssueTitle.setText(cursor.getString(cursor.getColumnIndexOrThrow("issue_title")));
-                setDatePicker(dpCoverDate, cursor.getString(cursor.getColumnIndexOrThrow("cover_date")));
+
+                setSpinner(spCoverDateMonth, cursor.getString(cursor.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.coverDateMonth)), 4);
+                etCoverDateYear.setText(cursor.getString(cursor.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.coverDateYear)));
+
+                etDateAquiredYear.setText(cursor.getString(cursor.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.dateAcquired)));
+
                 etCoverPrice.setText(s1);
                 setSpinner(spGrade, cursor.getString(cursor.getColumnIndexOrThrow("condition")), 1);
                 setSpinner(spStorageMethod, cursor.getString(cursor.getColumnIndexOrThrow("storage_method")), 2);
@@ -91,7 +101,6 @@ public class AddComic extends ActionBarActivity {
                 etCoverArtist.setText(cursor.getString(cursor.getColumnIndexOrThrow("cover_artist")));
                 etLocationAcquired.setText(cursor.getString(cursor.getColumnIndexOrThrow("location_acquired")));
                 setSpinner(spReadUnread, cursor.getString(cursor.getColumnIndexOrThrow("read_unread")), 3);
-                setDatePicker(dpDateAcquired, cursor.getString(cursor.getColumnIndexOrThrow("date_acquired")));
                 etComicLocation.setText(cursor.getString(cursor.getColumnIndexOrThrow("comic_location")));
                 cursor.close();
                 ((Button) findViewById(R.id.btnAddComic)).setText("Update Comic");
@@ -118,29 +127,13 @@ public class AddComic extends ActionBarActivity {
                 if (s.equals("Read")) sp.setSelection(1);
                 else sp.setSelection(0);
                 break;
+            case 4:
+                str = getResources().getStringArray(R.array.months);
+                for (int j = 0; j < str.length; ++j) {
+                    if (str[j].equals(s)) sp.setSelection(j);
+                }
+                break;
         }
-    }
-
-    public void setDatePicker(DatePicker dp, String s) {
-        if (!s.equals("")) {
-            String[] str = s.split("/");
-            dp.updateDate(Integer.parseInt(str[2]), Integer.parseInt(str[0]) - 1, Integer.parseInt(str[1]));
-        }
-    }
-
-    //all of the views on the page
-    EditText etSeries, etPublisher, etIssueNumber, etIssueTitle, etPricePaid,
-            etWriter, etPenciller, etInker, etColorist, etLetterer, etEditor,
-            etCoverArtist, etLocationAcquired, etCoverPrice, etComicLocation;
-    DatePicker dpCoverDate, dpDateAcquired;
-    Spinner spGrade, spStorageMethod, spReadUnread;
-
-
-    private String getDate(DatePicker dp) {
-        int intDay = dp.getDayOfMonth();
-        int intMonth = dp.getMonth() + 1;
-        int intYear = dp.getYear();
-        return intMonth + "/" + intDay + "/" + intYear;
     }
 
     public void addComic(View v) {
@@ -168,9 +161,10 @@ public class AddComic extends ActionBarActivity {
         cv.put(ComicBookTableStructure.ComicBookEntry.colorist, etColorist.getText().toString());
         cv.put(ComicBookTableStructure.ComicBookEntry.condition, spGrade.getSelectedItem().toString());
         cv.put(ComicBookTableStructure.ComicBookEntry.coverArtist, etCoverArtist.getText().toString());
-        cv.put(ComicBookTableStructure.ComicBookEntry.coverDate, getDate(dpCoverDate));
+        cv.put(ComicBookTableStructure.ComicBookEntry.coverDateMonth, spCoverDateMonth.getSelectedItem().toString());
+        cv.put(ComicBookTableStructure.ComicBookEntry.coverDateYear,etCoverDateYear.getText().toString());
         cv.put(ComicBookTableStructure.ComicBookEntry.coverPrice, etCoverPrice.getText().toString());
-        cv.put(ComicBookTableStructure.ComicBookEntry.dateAcquired, getDate(dpDateAcquired));
+        cv.put(ComicBookTableStructure.ComicBookEntry.dateAcquired, etDateAquiredYear.getText().toString());
         cv.put(ComicBookTableStructure.ComicBookEntry.editor, etEditor.getText().toString());
         cv.put(ComicBookTableStructure.ComicBookEntry.inker, etInker.getText().toString());
         cv.put(ComicBookTableStructure.ComicBookEntry.issueTitle, etIssueTitle.getText().toString());
@@ -213,5 +207,6 @@ public class AddComic extends ActionBarActivity {
         }
 
         dbComics.close();
+        finish();
     }
 }

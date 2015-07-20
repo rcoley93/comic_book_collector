@@ -45,9 +45,14 @@ public class ViewComic extends ActionBarActivity {
         Cursor c = dbComics.rawQuery(strQuery, null);
         c.moveToFirst();
 
+        String strCoverPriceRaw = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.coverPrice));
+        String strPricePaidRaw = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.pricePaid));
+        String strIssueNumberRaw = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.issueNumber));
+
         //set all the text views to the appropriate text
-        String strPricePaid = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.pricePaid));
-        String strCoverPrice = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.pricePaid));
+        String strPricePaid = (strPricePaidRaw.length() > 5) ? strPricePaidRaw.substring(4) : "";
+        String strCoverPrice = (strCoverPriceRaw.length() > 5) ? strCoverPriceRaw.substring(4) : "";
+        String strIssueNumber = (strIssueNumberRaw.charAt(0) == '#') ? strIssueNumberRaw.substring(1) : strIssueNumberRaw;
 
         if (strPricePaid == "") strPricePaid = "Free";
         else if (strPricePaid.length() == 3) strPricePaid = strPricePaid + "0";
@@ -57,12 +62,12 @@ public class ViewComic extends ActionBarActivity {
 
         etSeries.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.series)));
         etPublisher.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.publisher)));
-        etIssueNumber.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.issueNumber)));
+        etIssueNumber.setText(strIssueNumber);
         etIssueTitle.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.issueTitle)));
-        etCoverDate.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.coverDate)));
+        etCoverDate.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.coverDateMonth)) + " " + c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.coverDateYear)));
         etCoverPrice.setText(strCoverPrice);
-        etGrade.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.condition)));
-        etStorageMethod.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.storageMethod)));
+        etGrade.setText(HelperFunctions.getGrade(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.condition))));
+        etStorageMethod.setText(HelperFunctions.getStorage(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.storageMethod))));
         etPricePaid.setText(strPricePaid);
         etWriter.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.writer)));
         etPenciller.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.penciller)));
@@ -72,7 +77,7 @@ public class ViewComic extends ActionBarActivity {
         etEditor.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.editor)));
         etCoverArtist.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.coverArtist)));
         etLocationAcquired.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.locationAcquired)));
-        etReadUnread.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.readUnread)));
+        etReadUnread.setText(HelperFunctions.getReadUnread(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.readUnread))));
         etDateAcquired.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.dateAcquired)));
         etComicLocation.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.comicLocation)));
 

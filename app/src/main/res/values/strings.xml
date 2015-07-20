@@ -36,5 +36,32 @@
         <item>Issue Number</item>
     </string-array>
 
+    <string-array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+        <item>Annual</item>
+    </string-array>
+
+    <string-array name="export">
+        <item>CSV</item>
+        <item>Excel</item>
+        <item>HTML</item>
+        <item>PDF</item>
+    </string-array>
+
+    <string name="title_activity_export_comics">Export Comics</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
 
 </resources>

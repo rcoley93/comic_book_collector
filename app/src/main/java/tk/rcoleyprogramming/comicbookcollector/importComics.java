@@ -65,8 +65,6 @@ public class importComics extends ActionBarActivity {
         dialogBuild.setTitle("Importing.....");
         dialogBuild.setMessage("Adding Comics!");
 
-        //dialogBuild.setNegativeButton("Cancel",null);
-
         dialog = dialogBuild.create();
         dialog.show();
     }
@@ -81,87 +79,14 @@ public class importComics extends ActionBarActivity {
 
     private class importComicbooks extends AsyncTask<String, String, String> {
 
+        List<String[]> list = new ArrayList<>();
+        Context c;
+        ComicBookDatabaseHelper cbdbHelper;
+        private String resp, fileName;
         importComicbooks(String filename, ComicBookDatabaseHelper cbdbh, Context context) {
             fileName = filename;
             cbdbHelper = cbdbh;
             c = context;
-        }
-
-        private String resp, fileName;
-        List<String[]> list = new ArrayList<>();
-        Context c;
-        ComicBookDatabaseHelper cbdbHelper;
-
-        private String getDate(String s, String s1) {
-            switch (s) {
-                case " January":
-                    return "1/1/" + s1;
-                case " February":
-                    return "2/1/" + s1;
-                case " March":
-                    return "3/1/" + s1;
-                case " April":
-                    return "4/1/" + s1;
-                case " May":
-                    return "5/1/" + s1;
-                case " June":
-                    return "6/1/" + s1;
-                case " July":
-                    return "7/1/" + s1;
-                case " August":
-                    return "8/1/" + s1;
-                case " September":
-                    return "9/1/" + s1;
-                case " October":
-                    return "10/1/" + s1;
-                case " November":
-                    return "11/1/" + s1;
-                case " December":
-                    return "12/1/" + s1;
-            }
-            return s + " " + s1;
-        }
-
-        private String getGrade(String str) {
-            switch (str) {
-                case "Near Mint":
-                case "Near Mint/Mint":
-                case "Mint":
-                    return "NM Near Mint";
-                case "Very Fine/Near Mint":
-                case "Very Fine":
-                    return "VF Very Fine";
-                case "Fine/Very Fine":
-                case "Fine":
-                    return "FN Fine";
-                case "Very Good/Fine":
-                case "Very Good":
-                    return "VG Very Good";
-                case "Good/Very Good":
-                case "Good":
-                    return "GD Good";
-                case "Fair/Good":
-                case "Fair":
-                    return "FR Fair";
-                case "Poor":
-                    return "PR Poor";
-            }
-            return "Unknown";
-        }
-
-        private String getStorage(String str) {
-            switch (str) {
-                case "Bagged/Boarded":
-                    return str;
-                case "Bagged":
-                    return str;
-            }
-            return "None";
-        }
-
-        private String getReadUnread(String str) {
-            if (str.equals("read")) return "Read";
-            return "Unread";
         }
 
         private void processFile(String file) {
@@ -209,7 +134,6 @@ public class importComics extends ActionBarActivity {
                     if (!categories[i].equals(row[i])) {
                         runOnUiThread(new Runnable() {
                             public void run() {
-
                                 Toast.makeText(getApplicationContext(), "Error! Import File not formatted correctly!", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -223,33 +147,32 @@ public class importComics extends ActionBarActivity {
                     }
 
                     SQLiteDatabase dbComics = cbdbHelper.getWritableDatabase();
-                    String strCoverPrice = (row[17].length() > 5) ? row[17].substring(4) : "";
-                    String strPricePaid = (row[10].length() > 5) ? row[10].substring(4) : "";
-                    String strIssueNumber = (row[1].charAt(0) == '#') ? row[1].substring(1) : row[1];
 
                     //set all the values
                     ContentValues cv = new ContentValues();
 
-                    cv.put(ComicBookTableStructure.ComicBookEntry.colorist, row[14]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.condition, getGrade(row[7]));
-                    cv.put(ComicBookTableStructure.ComicBookEntry.coverArtist, row[15]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.coverDate, getDate(row[4], row[5]));
-                    cv.put(ComicBookTableStructure.ComicBookEntry.coverPrice, strCoverPrice);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.dateAcquired, row[19]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.editor, row[16]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.inker, row[13]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.issueTitle, row[2]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.letterer, row[15]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.issueNumber, strIssueNumber);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.locationAcquired, row[20]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.penciller, row[12]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.pricePaid, strPricePaid);
+
                     cv.put(ComicBookTableStructure.ComicBookEntry.series, row[0]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.issueNumber, row[1]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.issueTitle, row[2]);
                     cv.put(ComicBookTableStructure.ComicBookEntry.publisher, row[3]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.writer, row[11]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.readUnread, getReadUnread(row[18]));
-                    cv.put(ComicBookTableStructure.ComicBookEntry.storageMethod, getStorage(row[8]));
+                    cv.put(ComicBookTableStructure.ComicBookEntry.coverDateMonth, row[4]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.coverDateYear, row[5]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.coverPrice, row[6]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.condition, row[7]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.storageMethod, row[8]);
                     cv.put(ComicBookTableStructure.ComicBookEntry.comicLocation, row[9]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.pricePaid, row[10]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.writer, row[11]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.penciller, row[12]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.inker, row[13]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.colorist, row[14]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.letterer, row[15]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.editor, row[16]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.coverArtist, row[17]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.readUnread, row[18]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.dateAcquired, row[19]);
+                    cv.put(ComicBookTableStructure.ComicBookEntry.locationAcquired, row[20]);
 
                     long count = 0;
                     //check to see if update
@@ -264,14 +187,14 @@ public class importComics extends ActionBarActivity {
                     if (count == 0) {
                         runOnUiThread(new Runnable() {
                             public void run() {
-                                Toast.makeText(getApplicationContext(), "Error! Couldn't enter the new comics into the database", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Error! Couldn't enter the new comics into the database!", Toast.LENGTH_SHORT).show();
                             }
                         });
                         return resp;
                     }
 
                     dbComics.close();
-                    publishProgress(String.valueOf(i), String.valueOf(list.size()));
+                    publishProgress(String.valueOf(i), String.valueOf(list.size() - 1));
                 }
             }
             resp = "Added Comics to database!";
@@ -283,6 +206,7 @@ public class importComics extends ActionBarActivity {
             // execution of result of Long time consuming operation
             dismissDialog();
             Toast.makeText(getApplicationContext(), "Completed Import of Comics!", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         @Override

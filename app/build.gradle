@@ -1,22 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'ryan'
-            keyPassword 'chat07'
-            storeFile file('E:/Users/Ryan/Documents/Android_Signing_Key.jks')
-            storePassword 'chat07'
-        }
-    }
     compileSdkVersion 21
     buildToolsVersion "22.0.1"
     defaultConfig {
         applicationId "tk.rcoleyprogramming.comicbookcollector"
         minSdkVersion 15
         targetSdkVersion 15
-        versionCode 6
-        versionName '1.5'
+        versionCode 8
+        versionName '1.7'
     }
     buildTypes {
         release {
@@ -29,7 +21,14 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.0'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/opencsv-2.3.jar')
+    //compile files('libs/butterknife-7.0.1.jar')
+    //compile files('libs/pdfbox-app-1.8.9.jar')
+    //compile files('libs/poi-3.12-20150511.jar')
+    compile 'com.github.sromku:android-simple-storage:db8694ff7a'
+    compile files('libs/itextpdf-5.5.6.jar')
+    compile files('libs/xmlworker-5.5.6.jar')
+    compile files('libs/poi-3.12-20150511.jar')
 }
