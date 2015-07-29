@@ -21,4 +21,10 @@
       android:orderInCategory="100"
       android:title="About"
       app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_cam"
+        android:orderInCategory="100"
+        android:title="Camera"
+        app:showAsAction="never" />
 </menu>

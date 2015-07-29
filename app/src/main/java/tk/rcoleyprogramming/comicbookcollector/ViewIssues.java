@@ -14,13 +14,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.orm.query.Condition;
+import com.orm.query.Select;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ViewIssues extends ActionBarActivity {
     String strSeries, strPublisher;
-    ComicBookDatabaseHelper cbdbHelper = new ComicBookDatabaseHelper(this);
     private ArrayList<ComicListElement> aList;
     private MyAdapter aa;
 
@@ -52,45 +54,32 @@ public class ViewIssues extends ActionBarActivity {
 
     private void getListOfComics() {
         aList.clear();
-        //get the database
-        SQLiteDatabase db = cbdbHelper.getReadableDatabase();
-
-        //set the query settings
-        String[] strWantedValues = {ComicBookTableStructure.ComicBookEntry.issueNumber, ComicBookTableStructure.ComicBookEntry._ID, ComicBookTableStructure.ComicBookEntry.issueTitle};
-        String strSortOrder = ComicBookTableStructure.ComicBookEntry.issueNumber + " ASC";
-        String strWhere = ComicBookTableStructure.ComicBookEntry.series + " LIKE ?";
-        String[] strWhereArgs = {strSeries};
 
         //get the results
-        Cursor c = db.query(ComicBookTableStructure.ComicBookEntry.tableName, strWantedValues, strWhere, strWhereArgs, null, null, strSortOrder);
+        List<ComicBook> Comics = Select.from(ComicBook.class).where(Condition.prop("series").eq(strSeries), Condition.prop("publisher").eq(strPublisher)).orderBy("issue_number ASC").list();
 
         //finish the activity if there are no more comics in the series
-        if(c.getCount() == 0) this.finish();
+        if (Comics.size() == 0) this.finish();
 
 
         //parse the results
-        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            ComicListElement cle = new ComicListElement();
-
-            //get the series name
-            int intID = c.getInt(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry._ID));
-            String intIssueNumber = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.issueNumber));
-            String strTitle = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.issueTitle));
-
-            //set the values
-            cle.id = intID;
-            cle.issueNumber = intIssueNumber;
-            cle.title = strTitle;
-
-            aList.add(cle);
+        for (int i = 0; i < Comics.size(); ++i) {
+            ComicBook comic = Comics.get(i);
+            aList.add(new ComicListElement(comic.getId(), comic.getComicListElement()));
         }
 
-        //close the db and cursor
-        c.close();
-        db.close();
 
         //update the list view
         aa.notifyDataSetChanged();
+    }
+
+    public void addComic(View v) {
+        Intent i = new Intent(ViewIssues.this, AddComic.class);
+        i.putExtra("extra_data", true);
+        i.putExtra("series", strSeries);
+        i.putExtra("publisher", strPublisher);
+        startActivity(i);
+
     }
 
     private class MyAdapter extends ArrayAdapter<ComicListElement> {
@@ -141,14 +130,5 @@ public class ViewIssues extends ActionBarActivity {
 
             return newView;
         }
-    }
-
-    public void addComic(View v) {
-        Intent i = new Intent(ViewIssues.this, AddComic.class);
-        i.putExtra("extra_data", true);
-        i.putExtra("series", strSeries);
-        i.putExtra("publisher", strPublisher);
-        startActivity(i);
-
     }
 }

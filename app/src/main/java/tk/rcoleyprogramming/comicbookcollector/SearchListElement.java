@@ -4,17 +4,15 @@ package tk.rcoleyprogramming.comicbookcollector;
  * Created by Ryan on 5/30/2015.
  */
 public class SearchListElement {
-    SearchListElement() {
-    }
 
-    SearchListElement(String t, String p, String s, int in, int id) {
-        this.title = t;
-        this.publisher = p;
-        this.series = s;
-        this.issueNumber = in;
+    String title, publisher, series, issueNumber;
+    long id;
+
+    SearchListElement(long id, String[] values) {
         this.id = id;
+        this.title = values[2];
+        this.publisher = values[3];
+        this.series = values[0];
+        this.issueNumber = values[1];
     }
-
-    String title, publisher, series;
-    int issueNumber, id;
 }

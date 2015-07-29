@@ -4,8 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,15 +15,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.girish.cameraLibrary.CustomCamera;
+import com.girish.cameraLibrary.OnPictureTaken;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+import com.orm.query.Condition;
+import com.orm.query.Select;
 import com.sromku.simple.storage.SimpleStorage;
 import com.sromku.simple.storage.Storage;
 
@@ -37,14 +42,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.Collections;
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
 
     //set up the db
-    ComicBookDatabaseHelper cbdbHelper = new ComicBookDatabaseHelper(MainActivity.this);
     TextView tvComics, tvSeries, tvPublishers, tvRead, tvBagged, tvBoarded;
-    TextView tvSeries1, tvIssueNumber1, tvSeries2, tvIssueNumber2, tvSeries3, tvIssueNumber3, tvSeries4, tvIssueNumber4, tvSeries5, tvIssueNumber5;
-    TextView[] tvRecentlyAdded = {tvSeries1, tvIssueNumber1, tvSeries2, tvIssueNumber2, tvSeries3, tvIssueNumber3, tvSeries4, tvIssueNumber4, tvSeries5, tvIssueNumber5};
+    TextView[] tvRecentlyAdded = new TextView[10];
 
     //alert dialog
     AlertDialog.Builder dialogBuildExport;
@@ -107,10 +112,7 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
                 return true;
             case R.id.action_delete_all:
-                SQLiteDatabase db = cbdbHelper.getWritableDatabase();
-                db.execSQL(ComicBookTableStructure.SQL_DELETE_ENTRIES);
-                db.execSQL(ComicBookTableStructure.SQL_CREATE_ENTRIES);
-                db.close();
+                ComicBook.deleteAll(ComicBook.class);
                 getRecentComics();
                 getStatistics();
                 return true;
@@ -127,6 +129,17 @@ public class MainActivity extends ActionBarActivity {
                 return true;
             case R.id.action_export:
                 createDialog();
+                return true;
+            case R.id.action_cam:
+                CustomCamera cam = new CustomCamera(MainActivity.this);
+                cam.setPictureTakenListner(new OnPictureTaken() {
+                    @Override
+                    public void pictureTaken(Bitmap bitmap, File filePath) {
+                        ImageView iv = (ImageView) findViewById(R.id.iv);
+                        iv.setImageBitmap(bitmap);
+                    }
+                });
+                cam.startCamera();
                 return true;
         }
 
@@ -177,84 +190,72 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void getRecentComics() {
-        ComicBookDatabaseHelper cbDH = new ComicBookDatabaseHelper(this);
-        SQLiteDatabase db = cbDH.getReadableDatabase();
 
-        String strQuery = "SELECT " + ComicBookTableStructure.ComicBookEntry.series + "," + ComicBookTableStructure.ComicBookEntry.issueNumber + " FROM " + ComicBookTableStructure.ComicBookEntry.tableName + " ORDER BY " + ComicBookTableStructure.ComicBookEntry._ID + " DESC LIMIT 5";
-        Cursor c = db.rawQuery(strQuery, null);
-        c.moveToFirst();
+        int count = (int) ComicBook.count(ComicBook.class, null, null);
+        if (count != 0) {
+            List<ComicBook> recentComics = ComicBook.listAll(ComicBook.class).subList(count - 5, count);
+            Collections.reverse(recentComics);
 
-        if(c.getCount() != 0) {
-            for (int i = 0; i < 5; i++) {
-                c.moveToPosition(i);
-                tvRecentlyAdded[i].setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.series)));
-                tvRecentlyAdded[i + 5].setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.issueNumber)));
-            }
-        }else{
-            tvRecentlyAdded[0].setText("No Comics have been Added!");
-            tvRecentlyAdded[5].setText("");
-            for(int i=1;i<5;i++){
-                tvRecentlyAdded[i].setText("");
-                tvRecentlyAdded[i + 5].setText("");
+            if (count != 0) {
+                for (int i = 0; i < 5; i++) {
+                    tvRecentlyAdded[i].setText(recentComics.get(i).getRecentDetails()[0]);
+                    tvRecentlyAdded[i + 5].setText(recentComics.get(i).getRecentDetails()[1]);
+                }
+            } else {
+                tvRecentlyAdded[0].setText("No Comics have been Added!");
+                tvRecentlyAdded[5].setText("");
+                for (int i = 1; i < 5; i++) {
+                    tvRecentlyAdded[i].setText("");
+                    tvRecentlyAdded[i + 5].setText("");
+                }
             }
         }
-
-        c.close();
-        db.close();
-        cbDH.close();
     }
 
     private void getStatistics() {
-        ComicBookDatabaseHelper cbDH = new ComicBookDatabaseHelper(this);
-        SQLiteDatabase db = cbDH.getReadableDatabase();
 
-        String strComicsQuery = "SELECT " + ComicBookTableStructure.ComicBookEntry.issueTitle + " FROM " + ComicBookTableStructure.ComicBookEntry.tableName;
-        String strSeriesQuery = "SELECT DISTINCT " + ComicBookTableStructure.ComicBookEntry.series + " FROM " + ComicBookTableStructure.ComicBookEntry.tableName;
-        String strPublisherQuery = "SELECT DISTINCT " + ComicBookTableStructure.ComicBookEntry.publisher + " FROM " + ComicBookTableStructure.ComicBookEntry.tableName;
-        String strReadQuery = "SELECT " + ComicBookTableStructure.ComicBookEntry.readUnread + " FROM " + ComicBookTableStructure.ComicBookEntry.tableName + " WHERE " + ComicBookTableStructure.ComicBookEntry.readUnread + "='Read'";
-        String strBaggedBoardedQuery = "SELECT " + ComicBookTableStructure.ComicBookEntry.storageMethod + " FROM " + ComicBookTableStructure.ComicBookEntry.tableName + " WHERE " + ComicBookTableStructure.ComicBookEntry.storageMethod + "='Bagged/Boarded'";
-        String strBaggedQuery = "SELECT " + ComicBookTableStructure.ComicBookEntry.storageMethod + " FROM " + ComicBookTableStructure.ComicBookEntry.tableName + " WHERE " + ComicBookTableStructure.ComicBookEntry.storageMethod + "='Bagged'";
+        String strSeriesQuery = "SELECT DISTINCT series FROM " + ComicBook.getTableName(ComicBook.class);
+        String strPublisherQuery = "SELECT DISTINCT publisher FROM " + ComicBook.getTableName(ComicBook.class);
 
-        int intComics, intSeries, intPublishers, intRead, intBagged, intBaggedBoarded;
+        long lngComics, lngSeries, lngPublishers, lngRead, lngBagged, lngBaggedBoarded;
 
-        Cursor count = db.rawQuery(strComicsQuery, null);
-        intComics = count.getCount();
+        lngComics = Select.from(ComicBook.class).count();
 
-        count = db.rawQuery(strSeriesQuery, null);
-        intSeries = count.getCount();
 
-        count = db.rawQuery(strPublisherQuery, null);
-        intPublishers = count.getCount();
+        List<ComicBook> queries = ComicBook.findWithQuery(ComicBook.class, strSeriesQuery, null);
 
-        count = db.rawQuery(strReadQuery, null);
-        intRead = count.getCount();
+        lngSeries = queries.size();
 
-        count = db.rawQuery(strBaggedBoardedQuery, null);
-        intBaggedBoarded = count.getCount();
+        queries = ComicBook.findWithQuery(ComicBook.class, strPublisherQuery, null);
 
-        count = db.rawQuery(strBaggedQuery, null);
-        intBagged = count.getCount();
+        lngPublishers = queries.size();
 
-        intBagged += intBaggedBoarded;
+        queries.clear();
 
-        float fltReadPercent = (((float) intRead) / ((float) intComics))*100;
-        float fltBaggedPercent = (((float) intBagged) / ((float) intComics))*100;
-        float fltBoardedPercent = (((float) intBaggedBoarded) / ((float) intComics))*100;
+        lngRead = ComicBook.count(ComicBook.class, "read_unread='read'", null);//Select.from(ComicBook.class).where(Condition.prop("read_unread").like("read")).count();
 
-        tvComics.setText(String.valueOf(intComics));
-        tvPublishers.setText(String.valueOf(intPublishers));
-        tvSeries.setText(String.valueOf(intSeries));
+        lngBaggedBoarded = Select.from(ComicBook.class).where(Condition.prop("storage_method").like("Bagged/Boarded")).count();
+
+        lngBagged = Select.from(ComicBook.class).where(Condition.prop("storage_method").like("Bagged")).count();
+
+        lngBagged += lngBaggedBoarded;
+
+        float fltReadPercent = (((float) lngRead) / ((float) lngComics)) * 100;
+        float fltBaggedPercent = (((float) lngBagged) / ((float) lngComics)) * 100;
+        float fltBoardedPercent = (((float) lngBaggedBoarded) / ((float) lngComics)) * 100;
+
+        tvComics.setText(String.valueOf(lngComics));
+        tvPublishers.setText(String.valueOf(lngPublishers));
+        tvSeries.setText(String.valueOf(lngSeries));
 
         if(Float.isNaN(fltBaggedPercent)) fltBaggedPercent = 0;
         if(Float.isNaN(fltBoardedPercent)) fltBoardedPercent = 0;
         if(Float.isNaN(fltReadPercent)) fltReadPercent = 0;
 
-        tvBagged.setText(String.valueOf(intBagged) + " (" + new DecimalFormat("##.#").format(fltBaggedPercent) + "%)");
-        tvBoarded.setText(String.valueOf(intBaggedBoarded) + " (" + new DecimalFormat("##.#").format(fltBoardedPercent) + "%)");
-        tvRead.setText(String.valueOf(intRead) + " (" + new DecimalFormat("##.#").format(fltReadPercent) + "%)");
+        tvBagged.setText(String.valueOf(lngBagged) + " (" + new DecimalFormat("##.#").format(fltBaggedPercent) + "%)");
+        tvBoarded.setText(String.valueOf(lngBaggedBoarded) + " (" + new DecimalFormat("##.#").format(fltBoardedPercent) + "%)");
+        tvRead.setText(String.valueOf(lngRead) + " (" + new DecimalFormat("##.#").format(fltReadPercent) + "%)");
 
-        db.close();
-        cbDH.close();
     }
 
     private boolean sdEnabled() {
@@ -282,12 +283,10 @@ public class MainActivity extends ActionBarActivity {
 
     private class exportComicBooks extends AsyncTask<String, String, String> {
 
-        ComicBookDatabaseHelper cbdbHelper;
         private String exportType;
 
         exportComicBooks(String strExportType) {
             exportType = strExportType;
-            cbdbHelper = new ComicBookDatabaseHelper(getApplicationContext());
         }
 
         @Override
@@ -297,14 +296,10 @@ public class MainActivity extends ActionBarActivity {
                     "Writer(s)", "Penciller(s)", "Inker(s)", "Colorist(s)", "Letterer(s)", "Editor(s)",
                     "Cover Artist(s)", "Read/Unread", "Date Acquired", "Location Acquired"};
 
-            SQLiteDatabase dbComics = cbdbHelper.getReadableDatabase();
+            List<ComicBook> Comics = ComicBook.listAll(ComicBook.class);
+            int totalComics = Comics.size(), currentComic = 0;
 
-            String strQuery = "SELECT * FROM " + ComicBookTableStructure.ComicBookEntry.tableName;
-            Cursor c = dbComics.rawQuery(strQuery, null);
-            c.moveToFirst();
-            int totalComics = c.getCount(), currentComic = 0;
-
-            if (c.getCount() == 0) {
+            if (totalComics == 0) {
                 runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(getApplicationContext(), "Error! There are no Comics to export!", Toast.LENGTH_SHORT).show();
@@ -333,15 +328,17 @@ public class MainActivity extends ActionBarActivity {
                     csv = "";
 
                     do {
-                        for (int i = 1; i < c.getColumnCount(); i++) {
+                        ComicBook comic = Comics.get(0);
+                        for (int i = 0; i < 21; i++) {
                             csv += "\"";
-                            if (i != c.getColumnCount() - 1) csv += c.getString(i) + "\",";
-                            else csv += c.getString(i) + "\"";
+                            if (i != totalComics - 1) csv += comic.getAllDetails()[i] + "\",";
+                            else csv += comic.getAllDetails()[i] + "\"";
                         }
                         storageCSV.appendFile("Exports", "collection.csv", csv);
                         csv = "";
+                        Comics.remove(0);
                         publishProgress(Integer.toString(++currentComic), Integer.toString(totalComics));
-                    } while (c.moveToNext());
+                    } while (!Comics.isEmpty());
                     break;
                 case "HTML":
                 case "PDF":
@@ -362,22 +359,24 @@ public class MainActivity extends ActionBarActivity {
                     storageHTML.createFile("Exports", "collection.html", htmlHeader);
 
                     for (int i = 0; i < categories.length; ++i) {
-                        String str = "\t\t\t\t<th>" + categories[i] + "</th>";
+                        String str = "\t\t\t\t<th><center>" + categories[i] + "</center></th>";
                         storageHTML.appendFile("Exports", "collection.html", str);
                     }
 
                     storageHTML.appendFile("Exports", "collection.html", "\t\t\t</tr>");
 
                     do {
+                        ComicBook comic = Comics.get(0);
                         String html = "\t\t\t<tr>";
                         storageHTML.appendFile("Exports", "collection.html", html);
-                        for (int i = 1; i < c.getColumnCount(); i++) {
-                            html = "\t\t\t\t<td>" + c.getString(i) + "</td>";
+                        for (int i = 0; i < 21; i++) {
+                            html = "\t\t\t\t<td><center>" + comic.getAllDetails()[i] + "</center></td>";
                             storageHTML.appendFile("Exports", "collection.html", html);
                         }
                         storageHTML.appendFile("Exports", "collection.html", "\t\t\t</tr>");
+                        Comics.remove(0);
                         publishProgress(Integer.toString(++currentComic), Integer.toString(totalComics));
-                    } while (c.moveToNext());
+                    } while (!Comics.isEmpty());
 
                     storageHTML.appendFile("Exports", "collection.html", htmlFooter);
 
@@ -463,7 +462,8 @@ public class MainActivity extends ActionBarActivity {
 
                     for (int i = 0; i < categories.length; ++i) {
                         cell = row.createCell(i);
-                        cell.setCellValue(categories[i]);
+                        if (i == 5) cell.setCellValue(Integer.parseInt(categories[i]));
+                        else cell.setCellValue(categories[i]);
                         cell.setCellStyle(header);
                     }
 
@@ -471,16 +471,18 @@ public class MainActivity extends ActionBarActivity {
                     int rowCount = 2;
 
                     do {
+                        ComicBook comic = Comics.get(0);
                         row = sheet.createRow(rowCount++);
 
-                        for (int i = 1; i < c.getColumnCount(); i++) {
+                        for (int i = 0; i < 21; i++) {
                             cell = row.createCell(i - 1);
                             cell.setCellStyle(values);
-                            cell.setCellValue(c.getString(i));
+                            cell.setCellValue(comic.getAllDetails()[i]);
                         }
 
+                        Comics.remove(0);
                         publishProgress(Integer.toString(++currentComic), Integer.toString(totalComics));
-                    } while (c.moveToNext());
+                    } while (!Comics.isEmpty());
 
 
                     /*for(int i = 0;i<categories.length;++i){

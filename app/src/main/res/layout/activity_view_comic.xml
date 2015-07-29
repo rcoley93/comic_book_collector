@@ -1,95 +1,458 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:paddingLeft="@dimen/activity_horizontal_margin" android:paddingTop="@dimen/activity_vertical_margin" android:paddingRight="@dimen/activity_horizontal_margin" android:paddingBottom="@dimen/activity_vertical_margin" android:layout_width="fill_parent" android:layout_height="fill_parent"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
-    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
         <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1">
-        <TableLayout android:gravity="left|center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:weightSum="2.0" android:layout_weight="1.0" style="">
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Series: " style="" />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etseries" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Series: " style="" />
+
+            <TableLayout
+                style=""
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0"
+                android:gravity="left|center"
+                android:orientation="vertical"
+                android:weightSum="2.0">
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style=""
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Series: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etseries"
+                        style=""
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Series: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Issue Number: " android:inputType="number" />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etissueNumber" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Issue Number: " android:inputType="number" />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="Issue Number: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etissueNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="Issue Number: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Issue Title: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etissueTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Issue Title: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Issue Title: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etissueTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Issue Title: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Publisher: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etpublisher" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Publisher: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Publisher: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etpublisher"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Publisher: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Cover Date: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etcoverDate" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Cover Date: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cover Date: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etcoverDate"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cover Date: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Cover Price: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etcoverPrice" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Cover Price: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cover Price: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etcoverPrice"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cover Price: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Read/Unread: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etreadUnread" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Read/Unread: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Read/Unread: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etreadUnread"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Read/Unread: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Comic Grade: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etcondition" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Comic Grade: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Comic Grade: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etcondition"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Comic Grade: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Storage Method: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etstorageMethod" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Storage Method: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Storage Method: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etstorageMethod"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Storage Method: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Comic Location: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etComicLocation" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Comic Location: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Comic Location: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etComicLocation"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Comic Location: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Acquired Date: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etacquiredDate" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Acquired Date: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Acquired Date: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etacquiredDate"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Acquired Date: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Location Acquired: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etlocationAcquired" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Location Acquired: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Location Acquired: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etlocationAcquired"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Location Acquired: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Writer: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etwriter" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Writer: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Writer: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etwriter"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollHorizontally="false"
+                        android:text="Writer: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Penciller: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etpenciller" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Penciller: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Penciller: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etpenciller"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollHorizontally="false"
+                        android:text="Penciller: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Price Paid: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etpricePaid" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Price Paid: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Price Paid: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etpricePaid"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollHorizontally="false"
+                        android:text="Price Paid: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Inker: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etinker" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Inker: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Inker: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etinker"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollHorizontally="true"
+                        android:text="Inker: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Colorist: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etcolorist" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Colorist: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Colorist: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etcolorist"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollHorizontally="false"
+                        android:text="Colorist: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Letterer: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etletterer" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Letterer: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Letterer: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etletterer"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollHorizontally="false"
+                        android:text="Letterer: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Editor: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/eteditor" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Editor: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Editor: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/eteditor"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollHorizontally="false"
+                        android:text="Editor: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
-            <TableRow android:gravity="left|center" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Cover Artist: " />
-                <TextView android:textAppearance="?android:textAppearanceMedium" android:id="@+id/etcoverArtist" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Cover Artist: " />
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="left|center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cover Artist: "
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/etcoverArtist"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollHorizontally="false"
+                        android:text="Cover Artist: "
+                        android:textAppearance="?android:textAppearanceMedium" />
             </TableRow>
         </TableLayout>
     </ScrollView>
-        <Button android:textSize="30.0dp" android:textColor="#ffffffff" android:layout_gravity="bottom" android:id="@+id/etbtnAddComic" android:background="@drawable/button" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="10.0dip" android:layout_marginLeft="10.0dip" android:layout_marginTop="10.0dip" android:layout_marginRight="10.0dip" android:layout_marginBottom="10.0dip" android:text="Edit Comic" android:onClick="addComic" />
+
+        <Button
+            android:id="@+id/etbtnAddComic"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="10.0dip"
+            android:layout_marginBottom="10.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:layout_marginTop="10.0dip"
+            android:background="@drawable/button"
+            android:onClick="addComic"
+            android:text="Edit Comic"
+            android:textColor="#ffffffff"
+            android:textSize="30.0dp" />
     </LinearLayout>
 </RelativeLayout>

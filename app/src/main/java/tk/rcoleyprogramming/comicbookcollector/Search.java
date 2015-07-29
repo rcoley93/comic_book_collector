@@ -16,6 +16,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.orm.query.Select;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,6 @@ import java.util.List;
 public class Search extends ActionBarActivity {
     EditText etSearchQuery;
     Spinner spCategory;
-    ComicBookDatabaseHelper cbdbHelper = new ComicBookDatabaseHelper(this);
     private ArrayList<SearchListElement> aList;
     private MyAdapter aa;
 
@@ -45,31 +46,24 @@ public class Search extends ActionBarActivity {
 
     public void search(View v) {
         aList.clear();
-        SQLiteDatabase db = cbdbHelper.getReadableDatabase();
+
         String strCategory = spCategory.getSelectedItem().toString();
         String strSearchType, strWhere;
 
-        if (strCategory.equals("Title"))
-            strSearchType = ComicBookTableStructure.ComicBookEntry.issueTitle;
-        else strSearchType = ComicBookTableStructure.ComicBookEntry.issueNumber;
+        if (strCategory.equals("Title")) strSearchType = "issue_title";
+        else strSearchType = "issue_number";
         strWhere = "'%" + etSearchQuery.getText().toString() + "%'";
-        String strQuery = "SELECT * FROM " + ComicBookTableStructure.ComicBookEntry.tableName + " WHERE " + strSearchType + " LIKE " + strWhere;
+        String strQuery = "SELECT * FROM " + ComicBook.getTableName(ComicBook.class) + " WHERE " + strSearchType + " LIKE " + strWhere;
 
-        Cursor c = db.rawQuery(strQuery, null);
+        List<ComicBook> comics = ComicBook.findWithQuery(ComicBook.class, strQuery, null);
 
-        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            int intID = c.getInt(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry._ID));
-            int intIssueNumber = c.getInt(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.issueNumber));
-            String strSeries = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.series));
-            String strTitle = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.issueTitle));
-            String strPublisher = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.publisher));
+        for (int i = 0; i < comics.size(); ++i) {
 
-            aList.add(new SearchListElement(strTitle, strPublisher, strSeries, intIssueNumber, intID));
+            ComicBook current = comics.get(i);
+
+            aList.add(new SearchListElement(current.getId(), current.getSearchListElement()));
 
         }
-
-        c.close();
-        db.close();
 
         aa.notifyDataSetChanged();
 

@@ -15,14 +15,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ViewSeries extends ActionBarActivity {
 
-    ComicBookDatabaseHelper cbdbHelper = new ComicBookDatabaseHelper(this);
+    String strPublisher = null;
     private ArrayList<SeriesListElement> aList;
     private MyAdapter aa;
-    String strPublisher = null;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -46,39 +46,29 @@ public class ViewSeries extends ActionBarActivity {
         getListOfSeries();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getListOfSeries();
+    }
+
     private void getListOfSeries() {
         aList.clear();
-        //get the database
-        SQLiteDatabase db = cbdbHelper.getReadableDatabase();
 
-        //set the query
-        String strQuery = "SELECT DISTINCT " + ComicBookTableStructure.ComicBookEntry.series + "," + ComicBookTableStructure.ComicBookEntry.publisher + " FROM " + ComicBookTableStructure.ComicBookEntry.tableName;
-        //if(strPublisher != null && strPublisher != "") strQuery += " WHERE " + ComicBookTableStructure.ComicBookEntry.series + "='" + strPublisher+"'";
-
-        //get the results
-        Cursor c = db.rawQuery(strQuery, null);
+        List<ComicBook> Comics = ComicBook.findWithQuery(ComicBook.class, "SELECT DISTINCT series,publisher FROM " + ComicBook.getTableName(ComicBook.class), null);
 
         //parse the results
-        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+        for (int i = 0; i < Comics.size(); i++) {
 
-            //get the series name
-            String strSeries = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.series));
-            String strPublisher = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.publisher));
+            ComicBook comic = Comics.get(i);
 
             //get number of issues in the series
-            strQuery = "SELECT * FROM " + ComicBookTableStructure.ComicBookEntry.tableName + " WHERE " + ComicBookTableStructure.ComicBookEntry.series + " LIKE \"" + strSeries + "\"";
-            Cursor cCount = db.rawQuery(strQuery, null);
+            String strQuery = "series LIKE \"" + comic.getAllDetails()[0] + "\"";
+            Long count = ComicBook.count(ComicBook.class, strQuery, null);
 
-            //get the result
-            int intCount = cCount.getCount();
-            cCount.close();
-
-            aList.add(new SeriesListElement(strSeries, strPublisher, intCount));
+            aList.add(new SeriesListElement(count, comic.getSeriesListElement()));
         }
 
-        //close the db and cursor
-        c.close();
-        db.close();
         //update the list view
         aa.notifyDataSetChanged();
     }
@@ -116,9 +106,9 @@ public class ViewSeries extends ActionBarActivity {
             TextView tvIssuesNumber = (TextView) newView.findViewById(R.id.itemNumberOfIssues);
             TextView tvPublisher = (TextView) newView.findViewById(R.id.itemPublisher);
 
-            String strLabel = (w.issueNumber < 2) ? " issue" : " issues";
+            String strLabel = (w.issueCount < 2) ? " issue" : " issues";
             tvSeries.setText(w.series);
-            tvIssuesNumber.setText(String.valueOf(w.issueNumber) + strLabel);
+            tvIssuesNumber.setText(String.valueOf(w.issueCount) + strLabel);
             tvPublisher.setText(w.publisher);
 
             newView.setOnClickListener(new View.OnClickListener() {

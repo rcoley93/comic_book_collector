@@ -1,12 +1,8 @@
 package tk.rcoleyprogramming.comicbookcollector;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -26,10 +22,7 @@ public class ViewComic extends ActionBarActivity {
             etCoverArtist, etLocationAcquired, etCoverPrice, etCoverDate,
             etDateAcquired, etGrade, etStorageMethod, etReadUnread, etComicLocation;
 
-    int intID;
-
-    //start up the database
-    ComicBookDatabaseHelper cbdbHelper = new ComicBookDatabaseHelper(this);
+    long lngID;
 
     @Override
     protected void onResume() {
@@ -39,15 +32,11 @@ public class ViewComic extends ActionBarActivity {
 
     public void viewComic() {
 
-        SQLiteDatabase dbComics = cbdbHelper.getReadableDatabase();
+        ComicBook comic = ComicBook.findById(ComicBook.class, lngID);
 
-        String strQuery = "SELECT * FROM " + ComicBookTableStructure.ComicBookEntry.tableName + " WHERE " + ComicBookTableStructure.ComicBookEntry._ID + " LIKE " + String.valueOf(intID);
-        Cursor c = dbComics.rawQuery(strQuery, null);
-        c.moveToFirst();
-
-        String strCoverPriceRaw = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.coverPrice));
-        String strPricePaidRaw = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.pricePaid));
-        String strIssueNumberRaw = c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.issueNumber));
+        String strCoverPriceRaw = comic.getAllDetails()[6];
+        String strPricePaidRaw = comic.getAllDetails()[9];
+        String strIssueNumberRaw = comic.getAllDetails()[1];
 
         //set all the text views to the appropriate text
         String strPricePaid = (strPricePaidRaw.length() > 5) ? strPricePaidRaw.substring(4) : "";
@@ -55,34 +44,32 @@ public class ViewComic extends ActionBarActivity {
         String strIssueNumber = (strIssueNumberRaw.charAt(0) == '#') ? strIssueNumberRaw.substring(1) : strIssueNumberRaw;
 
         if (strPricePaid == "") strPricePaid = "Free";
-        else if (strPricePaid.length() == 3) strPricePaid = strPricePaid + "0";
+        else if (strPricePaid.length() == 3) strPricePaid += "0";
 
         if (strCoverPrice == "") strCoverPrice = "Free";
-        else if (strCoverPrice.length() == 3) strCoverPrice = strCoverPrice + "0";
+        else if (strCoverPrice.length() == 3) strCoverPrice += "0";
 
-        etSeries.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.series)));
-        etPublisher.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.publisher)));
+        etSeries.setText(comic.getAllDetails()[0]);
         etIssueNumber.setText(strIssueNumber);
-        etIssueTitle.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.issueTitle)));
-        etCoverDate.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.coverDateMonth)) + " " + c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.coverDateYear)));
+        etIssueTitle.setText(comic.getAllDetails()[2]);
+        etPublisher.setText(comic.getAllDetails()[3]);
+        etCoverDate.setText(comic.getAllDetails()[4] + " " + comic.getAllDetails()[5]);
         etCoverPrice.setText(strCoverPrice);
-        etGrade.setText(HelperFunctions.getGrade(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.condition))));
-        etStorageMethod.setText(HelperFunctions.getStorage(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.storageMethod))));
+        etGrade.setText(HelperFunctions.getGrade(comic.getAllDetails()[7]));
+        etStorageMethod.setText(HelperFunctions.getStorage(comic.getAllDetails()[8]));
         etPricePaid.setText(strPricePaid);
-        etWriter.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.writer)));
-        etPenciller.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.penciller)));
-        etInker.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.inker)));
-        etColorist.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.colorist)));
-        etLetterer.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.letterer)));
-        etEditor.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.editor)));
-        etCoverArtist.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.coverArtist)));
-        etLocationAcquired.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.locationAcquired)));
-        etReadUnread.setText(HelperFunctions.getReadUnread(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.readUnread))));
-        etDateAcquired.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.dateAcquired)));
-        etComicLocation.setText(c.getString(c.getColumnIndexOrThrow(ComicBookTableStructure.ComicBookEntry.comicLocation)));
+        etWriter.setText(comic.getAllDetails()[10]);
+        etPenciller.setText(comic.getAllDetails()[11]);
+        etInker.setText(comic.getAllDetails()[12]);
+        etColorist.setText(comic.getAllDetails()[13]);
+        etLetterer.setText(comic.getAllDetails()[14]);
+        etEditor.setText(comic.getAllDetails()[15]);
+        etCoverArtist.setText(comic.getAllDetails()[16]);
+        etReadUnread.setText(HelperFunctions.getReadUnread(comic.getAllDetails()[17]));
+        etDateAcquired.setText(comic.getAllDetails()[18]);
+        etLocationAcquired.setText(comic.getAllDetails()[19]);
+        etComicLocation.setText(comic.getAllDetails()[20]);
 
-        c.close();
-        dbComics.close();
     }
 
     @Override
@@ -91,7 +78,7 @@ public class ViewComic extends ActionBarActivity {
         setContentView(R.layout.activity_view_comic);
 
         Intent i = getIntent();
-        intID = i.getIntExtra("id", -1);
+        lngID = i.getLongExtra("id", -1);
 
         etSeries = (TextView) findViewById(R.id.etseries);
         etPublisher = (TextView) findViewById(R.id.etpublisher);
@@ -134,10 +121,7 @@ public class ViewComic extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         switch(id) {
             case R.id.action_delete:
-                String strQuery = "DELETE FROM " + ComicBookTableStructure.ComicBookEntry.tableName + " WHERE " + ComicBookTableStructure.ComicBookEntry._ID + "='" + intID + "'";
-                SQLiteDatabase db = cbdbHelper.getWritableDatabase();
-                db.execSQL(strQuery);
-                db.close();
+                ComicBook.findById(ComicBook.class, lngID).delete();
                 this.finish();
                 return true;
             case R.id.action_add_range:
@@ -234,39 +218,16 @@ public class ViewComic extends ActionBarActivity {
 
     private void addComics(ArrayList<Integer> aRange,String series, String publisher) {
         for(int i = 0;i<aRange.size();++i){
-            //set up the db
-            ComicBookDatabaseHelper cbdbHelper = new ComicBookDatabaseHelper(getApplicationContext());
-
-            SQLiteDatabase dbComics = cbdbHelper.getWritableDatabase();
-
-            //set all the values
-            ContentValues cv = new ContentValues();
-
-            cv.put(ComicBookTableStructure.ComicBookEntry.issueNumber,aRange.get(i));
-            cv.put(ComicBookTableStructure.ComicBookEntry.publisher, publisher);
-            cv.put(ComicBookTableStructure.ComicBookEntry.series, series);
-
-            long count = 0;
-
-            try {
-                //insert the new row
-                count = dbComics.insertOrThrow(ComicBookTableStructure.ComicBookEntry.tableName, null, cv);
-            } catch (SQLException ex) {
-                System.out.println(ex.toString());
-            }
-
-            if (count == 0) {
-                Toast.makeText(getApplicationContext(), "Error! Couldn't enter the new comic into the database", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getApplicationContext(), series + " issue number " + aRange.get(i) + " was added to the collection!", Toast.LENGTH_SHORT).show();
-            }
+            ComicBook newComic = new ComicBook(series, String.valueOf(aRange.get(i)), publisher);
+            newComic.save();
+            Toast.makeText(getApplicationContext(), series + " issue number " + aRange.get(i) + " was added to the collection!", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void addComic(View v) {
         Intent i = new Intent(ViewComic.this, AddComic.class);
         i.putExtra("extra_data", true);
-        i.putExtra("id", intID);
+        i.putExtra("id", lngID);
         startActivity(i);
     }
 }

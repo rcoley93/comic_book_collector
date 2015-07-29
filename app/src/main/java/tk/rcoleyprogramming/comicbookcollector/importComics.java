@@ -42,9 +42,8 @@ public class importComics extends ActionBarActivity {
         switch (requestCode) {
             case FILE_CHOOSER:
                 if (resultCode == RESULT_OK) {
-                    ComicBookDatabaseHelper cbdbHelper = new ComicBookDatabaseHelper(this);
                     String FilePath = data.getStringExtra("fileSelected");
-                    importComicbooks ic = new importComicbooks(FilePath, cbdbHelper,importComics.this);
+                    importComicbooks ic = new importComicbooks(FilePath, importComics.this);
                     ic.execute();
                 }
                 break;
@@ -81,11 +80,10 @@ public class importComics extends ActionBarActivity {
 
         List<String[]> list = new ArrayList<>();
         Context c;
-        ComicBookDatabaseHelper cbdbHelper;
         private String resp, fileName;
-        importComicbooks(String filename, ComicBookDatabaseHelper cbdbh, Context context) {
+
+        importComicbooks(String filename, Context context) {
             fileName = filename;
-            cbdbHelper = cbdbh;
             c = context;
         }
 
@@ -144,56 +142,12 @@ public class importComics extends ActionBarActivity {
                     row = list.get(i);
                     for (int j = 0; j < row.length; ++j) {
                         row[j] = row[j].replace("\"", "");
+                        row[j].trim();
                     }
 
-                    SQLiteDatabase dbComics = cbdbHelper.getWritableDatabase();
+                    ComicBook newComic = new ComicBook(row);
+                    newComic.save();
 
-                    //set all the values
-                    ContentValues cv = new ContentValues();
-
-
-                    cv.put(ComicBookTableStructure.ComicBookEntry.series, row[0]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.issueNumber, row[1]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.issueTitle, row[2]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.publisher, row[3]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.coverDateMonth, row[4]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.coverDateYear, row[5]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.coverPrice, row[6]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.condition, row[7]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.storageMethod, row[8]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.comicLocation, row[9]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.pricePaid, row[10]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.writer, row[11]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.penciller, row[12]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.inker, row[13]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.colorist, row[14]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.letterer, row[15]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.editor, row[16]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.coverArtist, row[17]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.readUnread, row[18]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.dateAcquired, row[19]);
-                    cv.put(ComicBookTableStructure.ComicBookEntry.locationAcquired, row[20]);
-
-                    long count = 0;
-                    //check to see if update
-                    try {
-                        //insert the new row
-                        count = dbComics.insertOrThrow(ComicBookTableStructure.ComicBookEntry.tableName, null, cv);
-                    } catch (SQLException ex) {
-                        System.out.println(ex.toString());
-                    }
-
-                    //check to see if it entered
-                    if (count == 0) {
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), "Error! Couldn't enter the new comics into the database!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        return resp;
-                    }
-
-                    dbComics.close();
                     publishProgress(String.valueOf(i), String.valueOf(list.size() - 1));
                 }
             }

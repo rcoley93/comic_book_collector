@@ -4,19 +4,26 @@ package tk.rcoleyprogramming.comicbookcollector;
  * Created by Ryan on 5/28/2015.
  */
 public class SeriesListElement {
+    long issueCount;
+    String series, publisher;
+
     SeriesListElement() {
     }
 
-    SeriesListElement(String s, String p, int i) {
+    SeriesListElement(String s, String p, long i) {
         this.series = s;
-        this.issueNumber = i;
+        this.issueCount = i;
         this.publisher = p;
     }
 
-    int issueNumber;
-    String series, publisher;
+    SeriesListElement(long count, String[] values) {
+        this.issueCount = count;
+        this.publisher = values[1];
+        this.series = values[0];
+
+    }
 
     public String toString() {
-        return "The title of the series is " + series + " and has " + issueNumber + " issues!";
+        return "The title of the series is " + series + " and has " + issueCount + " issues!";
     }
 }
